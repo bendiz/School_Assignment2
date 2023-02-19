@@ -81,11 +81,22 @@ def showClock(seconds: int, boolean: bool) -> list:
     clock = []
     hour = hours(seconds, boolean)
     minute = minutes(seconds)
-    for time in [hour, minute]:
-        if len(str(time)) == 1:
+    for digit in [hour, minute]:
+        if len(str(digit)) == 1:
             clock.append(lamp(0))
-            clock.append(lamp(time))
+            clock.append(lamp(digit))
         else:
-            for digit in str(time):
+            for digit in str(digit):
                 clock.append(lamp(int(digit)))
     return clock
+
+
+if __name__ == "__main__":
+    print("""This clock takes an input of time in seconds,
+and a boolean True/False for displaying 24hr/12hr clock.""")
+    time = int(input("Input the time in seconds: ").strip())
+    true_or_false = input("Input True (24hr), False (12hr): ").lower().strip()
+    if true_or_false == "true":
+        print(showClock(time, True))
+    else:
+        print(showClock(time, False))
