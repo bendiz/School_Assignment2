@@ -1,56 +1,91 @@
-def hours(seconds: float, boolean: bool) -> int or str:
-    """A function that takes in seconds from 00:00(midnight) and a boolean that returns
-    true for a 24-hour format and false for a 12-hour format.
-    
+def hours(seconds: int, boolean: bool) -> int:
+    """A function that takes in seconds from 00:00(midnight) and a boolean
+    that returns true for a 24-hour format and false for a 12-hour format.
+
     Args:
-    seconds (float): Seconds from 00:00 (midnight).
+    seconds (int): Seconds from 00:00 (midnight).
     boolean (bool): Boolean True/False.
 
     Returns:
     int: Hours as a 12h or 24h clock depending on the boolean parameter.
     """
-    hours = round(seconds / 3600)
+# 24hr format
     if boolean:
-        return hours
+        return int(seconds / 3600)
+# 12hr format
     else:
-        if (hours == 12):
-            return str(hours % 12).zfill(2)
-        else:
-            return hours % 12
+        return int((seconds / 3600) % 12 or 12)
 
-print(hours(3600*12, False))
 
-def minutes(seconds: float) -> int:
-    """A function that recieves seconds from 00:00(midnight), and a boolean that
-    returns true for 24-hour format and false for 12-hour format
-    
+def minutes(seconds: int) -> int:
+    """A function that recieves seconds from 00:00(midnight), and a boolean
+    that returns true for 24-hour format and false for 12-hour format
+
     Args:
-    seconds (float): Seconds from 00:00 (midnight)
-    
+    seconds (int): Seconds from 00:00 (midnight)
+
     Returns:
     int: Returns the minutes of the last hour"""
-    pass
+
+    return int(seconds/60 % 60)
+
 
 def lamp(digit: int) -> list:
     """A function that takes in a digit and returns a list that represents
     the digit in a 7-segment lamp.
-    
+
     Args:
     digit (int): Recieves a digit to represent in a 7-segment lamp
-    
-    Returns:
-    list: A list of numbers 0 for off and 1 for on indicating if the lamp is off/on """
-    pass
 
-def showClock(seconds:float, boolean:bool) -> list:
+    Returns:
+    list: A list of numbers 0 or 1 indicating if lamp is off/on """
+
+    match digit:
+        case 0:
+            return [1, 1, 0, 1, 1, 1, 1]
+        case 1:
+            return [0, 1, 0, 0, 1, 0, 0]
+        case 2:
+            return [1, 1, 1, 0, 0, 1, 1]
+        case 3:
+            return [1, 1, 1, 0, 1, 1, 0]
+        case 4:
+            return [0, 1, 1, 1, 1, 0, 0]
+        case 5:
+            return [1, 0, 1, 1, 1, 1, 0]
+        case 6:
+            return [1, 0, 1, 1, 1, 1, 1]
+        case 7:
+            return [1, 1, 0, 0, 1, 0, 0]
+        case 8:
+            return [1, 1, 1, 1, 1, 1, 1]
+        case 9:
+            return [1, 1, 1, 1, 1, 1, 0]
+
+
+def showClock(seconds: int, boolean: bool) -> list:
     """A function that recieves seconds 00:00 (midnight) and a boolean which
-    is True for 24-hour format and False for 12-hour format. Returns a list with the four lists that
-    returns from the lamp function. This function will call lamp() 4 times.
-    
+    is True for 24-hour format and False for 12-hour format.
+    Returns a list with the four lists that returns from the lamp function.
+    This function will call lamp() 4 times.
+
     Args:
-    seconds (float): Seconds from 00:00 (midnight)
+    seconds (int): Seconds from 00:00 (midnight)
     boolean (bool): True / False
-    
+
     Returns:
     list: A list with the four lists that returns from the lamp function """
-    pass
+
+    if (seconds >= 86400) or (seconds < 0) or (type(boolean) != bool):
+        return "Please enter a valid time and True/False for 12-hr/24-hr clock"
+    clock = []
+    hour = hours(seconds, boolean)
+    minute = minutes(seconds)
+    for time in [hour, minute]:
+        if len(str(time)) == 1:
+            clock.append(lamp(0))
+            clock.append(lamp(time))
+        else:
+            for digit in str(time):
+                clock.append(lamp(int(digit)))
+    return clock
