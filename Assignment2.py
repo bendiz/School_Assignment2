@@ -81,13 +81,15 @@ def showClock(seconds: int, boolean: bool) -> list:
     clock = []
     hour = hours(seconds, boolean)
     minute = minutes(seconds)
-    for digit in [hour, minute]:
-        if len(str(digit)) == 1:
+    for time in [hour, minute]:
+        # Checks if hour and minute only includes 1 digit and append 0 in front
+        if len(str(time)) == 1:
             clock.append(lamp(0))
-            clock.append(lamp(digit))
+            clock.append(lamp(time))
+        # If hour and minute has a length of 2 digits, return them unchanged
         else:
-            for digit in str(digit):
-                clock.append(lamp(int(digit)))
+            for digit in str(time):
+                clock.append(lamp(digit))
     return clock
 
 
